@@ -1,9 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Meta Tags -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Styles and Scripts -->
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/icon.svg" type="image/x-icon" />
+    <!-- Title -->
     <title>Music App</title>
   </head>
-  <body></body>
+  <body>
+    <nav>
+      <button class="menu-item" id="home">
+        <img src="assets/home.svg" alt="Home button home icon" />
+      </button>
+      <button class="menu-item" id="search">
+        <img src="assets/search.svg" alt="Search button search icon" />
+      </button>
+      <button class="menu-item" id="library">
+        <img src="assets/library.svg" alt="Library button library icon" />
+      </button>
+    </nav>
+    <main>
+      <div class="search-container search-container-display-none">
+        <img
+          src="assets/search.svg"
+          alt="Search icon"
+          class="search-icon search-container-display-none"
+        />
+        <input
+          type="text"
+          class="searchbar search-container-display-none"
+          id="searchbar"
+          placeholder="Type here to search..."
+        />
+      </div>
+
+      <div id="home-view">
+        <h1 class="title">Home</h1>
+      </div>
+
+      <div id="library-view" class="display-none">
+        <h1 class="title">Library</h1>
+        <h2>Your uploaded songs</h2>
+      </div>
+    </main>
+  </body>
 </html>
