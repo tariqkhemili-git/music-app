@@ -1,10 +1,12 @@
+// --- SELECTORS ---
+
 // Nav bar items
 const menuItems = document.querySelectorAll(".menu-item");
 const homeButton = document.getElementById("home");
 const searchButton = document.getElementById("search");
 const libraryButton = document.getElementById("library");
 
-// Search bar and search container
+// Search bar and container
 const searchBar = document.querySelector("#searchbar");
 const searchContainer = document.querySelector(".search-container");
 const searchImg = document.querySelector(".search-icon");
@@ -15,72 +17,129 @@ const musicBottom = document.querySelector(".music-bottom");
 const musicBottomItems = document.querySelectorAll(".music-bottom-item");
 const playPauseButton = document.getElementById("play-pause-btn");
 
-// Function to hide search bar
+// View Containers
+const homeView = document.getElementById("home-view");
+const libraryView = document.getElementById("library-view");
+
+// --- SEARCH FUNCTIONS ---
+
 const hideSearchBar = () => {
   searchBar.classList.add("search-container-display-none");
   searchContainer.classList.add("search-container-display-none");
   searchImg.classList.add("search-container-display-none");
 };
 
-// Function to toggle search bar
 const toggleSearchBar = () => {
   searchBar.classList.toggle("search-container-display-none");
   searchContainer.classList.toggle("search-container-display-none");
   searchImg.classList.toggle("search-container-display-none");
 };
 
-// Search button click event
+// Search button click
 searchButton.addEventListener("click", () => {
   toggleSearchBar();
-
-  // Check if the search bar is now visible (i.e., does NOT have the hidden class)
-  const isVisible = !searchBar.classList.contains(
-    "search-container-display-none"
-  );
-
-  if (isVisible) {
-    // slight timeout ensures the element is rendered before we try to focus
-    setTimeout(() => {
-      searchBar.focus();
-    }, 10);
+  // Focus if visible
+  if (!searchBar.classList.contains("search-container-display-none")) {
+    setTimeout(() => searchBar.focus(), 10);
   }
 });
 
-// Hide search bar when clicking outside of it
-document.addEventListener("click", (event) => {
-  // Check if the click happened inside the search button (including the image)
-  const clickedInsideButton = searchButton.contains(event.target);
+// Hide search on scroll or blur
+window.addEventListener("scroll", () => {
+  if (!searchBar.classList.contains("search-container-display-none")) {
+    hideSearchBar();
+  }
+});
 
-  // Check if the click happened inside the search bar itself
+window.addEventListener("blur", () => {
+  if (!searchBar.classList.contains("search-container-display-none")) {
+    hideSearchBar();
+  }
+});
+
+// Hide search when clicking outside
+document.addEventListener("click", (event) => {
+  const clickedInsideButton = searchButton.contains(event.target);
   const clickedInsideSearchBar = searchBar.contains(event.target);
 
-  // If the click was NOT inside the button AND NOT inside the search bar...
   if (!clickedInsideButton && !clickedInsideSearchBar) {
-    // ...and the search bar is currently open
     if (!searchBar.classList.contains("search-container-display-none")) {
       hideSearchBar();
     }
   }
 });
 
-// Hide music player when clicking outside of it
+// --- UI ANIMATIONS & CLICKS ---
+
+// Menu Items Animation
+menuItems.forEach((item) => {
+  item.addEventListener("animationend", () => item.classList.remove("playing"));
+  item.addEventListener("click", () => {
+    item.classList.remove("playing");
+    void item.offsetWidth; // Trigger reflow
+    item.classList.add("playing");
+  });
+});
+
+// Music Control Buttons Animation
+musicBottomItems.forEach((item) => {
+  item.addEventListener("animationend", () => item.classList.remove("playing"));
+  item.addEventListener("click", () => {
+    item.classList.remove("playing");
+    void item.offsetWidth;
+    item.classList.add("playing");
+  });
+});
+
+// Close Music Player when clicking outside
 document.addEventListener("click", (event) => {
-  // Check if the click happened inside the music player
-  const clickedInsideMusicPlayer = musicPlayer.contains(event.target);
+  const clickedInsidePlayer = musicPlayer.contains(event.target);
+  const clickedInsideBottom = musicBottom.contains(event.target);
 
-  // Check if the click happened inside the music bottom bar
-  const clickedInsideMusicBottom = musicBottom.contains(event.target);
-
-  // If the click was NOT inside the music player AND NOT inside the music bottom bar...
-  if (!clickedInsideMusicPlayer && !clickedInsideMusicBottom) {
-    // ...and the music player is currently open
+  if (!clickedInsidePlayer && !clickedInsideBottom) {
     if (musicPlayer.classList.contains("music-player-open")) {
       musicPlayer.classList.remove("music-player-open");
     }
   }
 });
 
-// Change cursor to default while hovering over music bottom while music player is open
+// Close Music Player on scroll
+window.addEventListener("scroll", () => {
+  if (musicPlayer.classList.contains("music-player-open")) {
+    musicPlayer.classList.remove("music-player-open");
+  }
+});
+
+// --- PLAYBACK LOGIC ---
+
+let isPlaying = false;
+
+const togglePlay = () => {
+  isPlaying = !isPlaying;
+  if (isPlaying) {
+    playPauseButton.setAttribute("src", "assets/pause.svg");
+  } else {
+    playPauseButton.setAttribute("src", "assets/play.svg");
+  }
+};
+
+// Play/Pause Button Click
+playPauseButton.addEventListener("click", (e) => {
+  e.stopPropagation(); // Stop bubbling to musicBottom
+  togglePlay();
+});
+
+// Global Spacebar Hotkey
+document.addEventListener("keydown", (event) => {
+  if (event.code === "Space" && document.activeElement !== searchBar) {
+    event.preventDefault(); // Stop scrolling
+    togglePlay();
+  }
+});
+
+// --- MUSIC BOTTOM BAR LOGIC (Merged) ---
+
+// 1. Mouseover: Change cursor style
 musicBottom.addEventListener("mouseover", () => {
   if (musicPlayer.classList.contains("music-player-open")) {
     musicBottom.style.cursor = "default";
@@ -89,100 +148,25 @@ musicBottom.addEventListener("mouseover", () => {
   }
 });
 
-// Hide search bar on scroll
-window.addEventListener("scroll", () => {
-  if (!searchBar.classList.contains("search-container-display-none")) {
-    hideSearchBar();
-  }
-});
-
-// Hide music player on scroll
-window.addEventListener("scroll", () => {
-  if (musicPlayer.classList.contains("music-player-open")) {
-    musicPlayer.classList.remove("music-player-open");
-  }
-});
-
-// Hide search bar on window focus loss
-window.addEventListener("blur", () => {
-  if (!searchBar.classList.contains("search-container-display-none")) {
-    hideSearchBar();
-  }
-});
-
-// Button click animations
-menuItems.forEach((item) => {
-  item.addEventListener("animationend", () => {
-    item.classList.remove("playing");
-  });
-
-  item.addEventListener("click", () => {
-    item.classList.remove("playing");
-    void item.offsetWidth;
-
-    item.classList.add("playing");
-  });
-});
-
-// Media player play/pause button click event
-musicBottomItems.forEach((item) => {
-  item.addEventListener("animationend", () => {
-    item.classList.remove("playing");
-  });
-
-  item.addEventListener("click", () => {
-    item.classList.remove("playing");
-    void item.offsetWidth;
-
-    item.classList.add("playing");
-  });
-});
-
-// Play/pause button alternating src on click
-playPauseButton.addEventListener("click", () => {
-  const currentSrc = playPauseButton.getAttribute("src");
-
-  if (currentSrc === "assets/play.svg") {
-    playPauseButton.setAttribute("src", "assets/pause.svg");
-  } else {
-    playPauseButton.setAttribute("src", "assets/play.svg");
-  }
-});
-
-// Event listener to open music player on music bottom click
+// 2. Click: Open Player (if not clicking a control button)
 musicBottom.addEventListener("click", (e) => {
-  // Check if the click originated from a button (or an icon inside a button)
   const clickedButton = e.target.closest(".music-bottom-item");
-
-  // Check if the player is currently closed
   const isPlayerClosed = !musicPlayer.classList.contains("music-player-open");
 
-  // Only open if the player is closed AND the click was NOT on a button
   if (isPlayerClosed && !clickedButton) {
     musicPlayer.classList.add("music-player-open");
+    musicBottom.style.cursor = "default";
   }
 });
 
 // --- PAGE SWITCHING LOGIC ---
 
-// 1. Select the specific views by their ID
-const homeView = document.getElementById("home-view");
-const libraryView = document.getElementById("library-view");
-
-// 2. Home button click event
 homeButton.addEventListener("click", () => {
-  // Show Home
   homeView.classList.remove("display-none");
-
-  // Hide Library
   libraryView.classList.add("display-none");
 });
 
-// 3. Library button click event
 libraryButton.addEventListener("click", () => {
-  // Hide Home
   homeView.classList.add("display-none");
-
-  // Show Library
   libraryView.classList.remove("display-none");
 });

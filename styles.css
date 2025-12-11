@@ -1,3 +1,4 @@
+/* --- UTILITIES --- */
 .display-none {
   display: none;
   visibility: hidden;
@@ -16,6 +17,7 @@
   animation-timing-function: ease-in-out;
 }
 
+/* --- BASICS --- */
 *,
 *::before,
 *::after {
@@ -48,13 +50,14 @@ main {
   width: auto;
   position: relative;
   margin: 1em;
-  overflow: hidden;
+  overflow: hidden; /* Important for hiding the player when it's at top: 150% */
 }
 
 .title {
   text-align: center;
 }
 
+/* --- NAVIGATION --- */
 nav {
   display: flex;
   gap: 10px;
@@ -62,7 +65,7 @@ nav {
   height: auto;
   background-color: var(--nav-color);
   padding: 20px;
-  border-radius: 0 10px 10px 0;
+  border-radius: 10px 10px 0 0;
 }
 
 .menu-item {
@@ -96,6 +99,7 @@ nav {
   width: 20px;
 }
 
+/* --- SEARCH --- */
 .search-container {
   display: flex;
   align-items: center;
@@ -109,6 +113,7 @@ nav {
   padding: 1rem;
   background-color: var(--clicking-color);
   border-radius: 10px;
+  z-index: 20;
 }
 
 .searchbar {
@@ -140,21 +145,28 @@ nav {
   filter: drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.5));
 }
 
+/* --- MUSIC BOTTOM BAR --- */
 .music-bottom {
-  position: relative;
-  display: flex;
+  /* Positioning relative to <main> */
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 100%;
-  height: 60px;
-  border-radius: 40px;
-  background-color: var(--nav-color);
+
+  /* Flexbox for centering items */
   display: flex;
   align-items: center;
   justify-content: center;
+
+  /* Size and Style */
+  width: 100%;
+  height: 60px;
+  background-color: var(--nav-color);
+  border-radius: 40px;
   border-top: 2px solid var(--menu-item-color);
+
+  /* Interaction */
   cursor: context-menu;
+  z-index: 5;
 }
 
 .music-bottom-item {
@@ -171,28 +183,38 @@ nav {
   width: 45px;
 }
 
+/* --- MUSIC PLAYER (Full View) --- */
 .music-player {
-  /* VISUAL STYLES */
+  /* Visual Styles */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: var(--nav-color);
   border-radius: 40px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   padding: 20px;
   z-index: 10;
   width: 90vw;
   max-width: 90vw;
   height: 300px;
   cursor: default;
-  position: absolute;
+  border-bottom: 2px solid var(--menu-item-color);
+
+  /* Positioning Logic */
+  position: absolute; /* Relative to <main> */
   left: 50%;
+
+  /* Initial State: Hidden below the container */
   top: 150%;
+
+  /* Always centered on its own axis */
   transform: translate(-50%, -50%);
+
+  /* Slide Animation */
   transition: top 0.5s ease;
 }
 
+/* The Active State: Slides the player up to the center */
 .music-player-open {
   top: 50%;
 }
@@ -203,6 +225,7 @@ nav {
   text-align: center;
 }
 
+/* --- ANIMATIONS --- */
 @keyframes push {
   0% {
     transform: scale(1);
@@ -215,6 +238,7 @@ nav {
   }
 }
 
+/* --- MEDIA QUERIES --- */
 @media only screen and (orientation: landscape) {
   body {
     flex-direction: row;
@@ -223,7 +247,7 @@ nav {
     flex-direction: column;
     height: 100vh;
     width: auto;
-    border-radius: 0 0 10px 0;
+    border-radius: 0 10px 10px 0;
   }
   main {
     width: 100%;
