@@ -21,38 +21,40 @@ const playPauseButton = document.getElementById("play-pause-btn");
 const homeView = document.getElementById("home-view");
 const libraryView = document.getElementById("library-view");
 
-// --- SEARCH FUNCTIONS ---
+// --- SEARCH FUNCTIONS (Updated for Active Classes) ---
 
 const hideSearchBar = () => {
-  searchBar.classList.add("search-container-display-none");
-  searchContainer.classList.add("search-container-display-none");
-  searchImg.classList.add("search-container-display-none");
+  // CHANGE: Remove 'search-active' instead of adding 'display-none'
+  searchBar.classList.remove("search-active");
+  searchContainer.classList.remove("search-active");
+  searchImg.classList.remove("search-active");
 };
 
 const toggleSearchBar = () => {
-  searchBar.classList.toggle("search-container-display-none");
-  searchContainer.classList.toggle("search-container-display-none");
-  searchImg.classList.toggle("search-container-display-none");
+  // CHANGE: Toggle 'search-active'
+  searchBar.classList.toggle("search-active");
+  searchContainer.classList.toggle("search-active");
+  searchImg.classList.toggle("search-active");
 };
 
 // Search button click
 searchButton.addEventListener("click", () => {
   toggleSearchBar();
   // Focus if visible
-  if (!searchBar.classList.contains("search-container-display-none")) {
-    setTimeout(() => searchBar.focus(), 10);
+  if (searchBar.classList.contains("search-active")) {
+    setTimeout(() => searchBar.focus(), 50);
   }
 });
 
 // Hide search on scroll or blur
 window.addEventListener("scroll", () => {
-  if (!searchBar.classList.contains("search-container-display-none")) {
+  if (searchBar.classList.contains("search-active")) {
     hideSearchBar();
   }
 });
 
 window.addEventListener("blur", () => {
-  if (!searchBar.classList.contains("search-container-display-none")) {
+  if (searchBar.classList.contains("search-active")) {
     hideSearchBar();
   }
 });
@@ -60,10 +62,11 @@ window.addEventListener("blur", () => {
 // Hide search when clicking outside
 document.addEventListener("click", (event) => {
   const clickedInsideButton = searchButton.contains(event.target);
-  const clickedInsideSearchBar = searchBar.contains(event.target);
+  // Note: Checking searchContainer ensures clicking the padding doesn't close it
+  const clickedInsideSearchBar = searchContainer.contains(event.target);
 
   if (!clickedInsideButton && !clickedInsideSearchBar) {
-    if (!searchBar.classList.contains("search-container-display-none")) {
+    if (searchBar.classList.contains("search-active")) {
       hideSearchBar();
     }
   }
@@ -137,7 +140,7 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-// --- MUSIC BOTTOM BAR LOGIC (Merged) ---
+// --- MUSIC BOTTOM BAR LOGIC ---
 
 // 1. Mouseover: Change cursor style
 musicBottom.addEventListener("mouseover", () => {
@@ -159,14 +162,15 @@ musicBottom.addEventListener("click", (e) => {
   }
 });
 
-// --- PAGE SWITCHING LOGIC ---
+// --- PAGE SWITCHING LOGIC (Updated for View Transitions) ---
 
 homeButton.addEventListener("click", () => {
-  homeView.classList.remove("display-none");
-  libraryView.classList.add("display-none");
+  // CHANGE: Use 'view-active' instead of 'display-none'
+  homeView.classList.add("view-active");
+  libraryView.classList.remove("view-active");
 });
 
 libraryButton.addEventListener("click", () => {
-  homeView.classList.add("display-none");
-  libraryView.classList.remove("display-none");
+  homeView.classList.remove("view-active");
+  libraryView.classList.add("view-active");
 });
