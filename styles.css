@@ -10,6 +10,12 @@
   position: absolute;
 }
 
+.playing {
+  animation-name: push;
+  animation-duration: 0.2s;
+  animation-timing-function: ease-in-out;
+}
+
 *,
 *::before,
 *::after {
@@ -42,6 +48,7 @@ main {
   width: auto;
   position: relative;
   margin: 1em;
+  overflow: hidden;
 }
 
 .title {
@@ -83,12 +90,6 @@ nav {
 
 .menu-item:active {
   background-color: var(--clicking-color);
-}
-
-.menu-item.playing {
-  animation-name: push;
-  animation-duration: 0.2s;
-  animation-timing-function: ease-in-out;
 }
 
 .menu-item img {
@@ -137,6 +138,69 @@ nav {
   background-repeat: no-repeat;
   margin-right: 10px;
   filter: drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.5));
+}
+
+.music-bottom {
+  position: relative;
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  border-radius: 40px;
+  background-color: var(--nav-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 2px solid var(--menu-item-color);
+  cursor: context-menu;
+}
+
+.music-bottom-item {
+  width: 40px;
+  margin: 0 15px;
+  cursor: pointer;
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+  animation: push 0.2s ease-in-out 0 infinite alternate paused normal;
+  transition: all 0.2s ease;
+}
+
+.music-bottom-item:hover {
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.495));
+  width: 45px;
+}
+
+.music-player {
+  /* VISUAL STYLES */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--nav-color);
+  border-radius: 40px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  z-index: 10;
+  width: 90vw;
+  max-width: 90vw;
+  height: 300px;
+  cursor: default;
+  position: absolute;
+  left: 50%;
+  top: 150%;
+  transform: translate(-50%, -50%);
+  transition: top 0.5s ease;
+}
+
+.music-player-open {
+  top: 50%;
+}
+
+.music-player-header {
+  width: 100%;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 @keyframes push {
