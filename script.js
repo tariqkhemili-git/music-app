@@ -174,3 +174,12 @@ libraryButton.addEventListener("click", () => {
   homeView.classList.remove("view-active");
   libraryView.classList.add("view-active");
 });
+
+// Boilerplate for a playlist
+const samplePlaylist = `
+  <div class="playlist">
+    <div class="playlist-cover">
+      <h3 class="playlist-name">Playlist name</h3>
+    </div>
+  </div>
+`;

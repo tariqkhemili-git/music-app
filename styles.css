@@ -239,6 +239,111 @@ nav {
   z-index: 1;
 }
 
+.playlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+
+.playlist-cover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  width: 100%;
+  height: 150px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+
+  /* UPDATED: Faster, smoother transition for all effects */
+  transition: all 0.3s ease;
+
+  background-image: url("assets/playlist-cover.png");
+  background-size: cover;
+  background-position: center;
+}
+
+/* NEW: The Hover Effect */
+.playlist-cover:hover {
+  /* Matches the "lift" from the create card */
+  transform: translateY(-5px);
+  /* Brighter, more defined shadow on hover */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 15px var(--hover-color);
+}
+
+.create-playlist-cover {
+  /* Inherits size/shape from .playlist-cover */
+  position: relative;
+  background-image: none; /* Override default cover image */
+
+  /* 1. Visuals: Transparent bg + Dashed border */
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 2px dashed var(--menu-item-color);
+
+  /* 2. Smooth Animation setup */
+  transition: all 0.3s ease;
+  overflow: hidden; /* Keeps animations inside the border */
+}
+
+/* To avoid affecting the create-playlist-cover's custom hover */
+.create-playlist-cover:hover {
+  /* Make sure this is still defined after the base .playlist-cover:hover */
+  /* This prevents the base class from overriding your custom create-playlist shadow */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.playlist-name {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+  z-index: 2;
+
+  /* NEW: Text shadow for better contrast against background images */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 1);
+  /* NEW: Transition for any future text color changes */
+  transition: all 0.3s ease;
+}
+
+.plus-bg {
+  /* Keep your centering */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  /* Size & Look */
+  width: 35%; /* Slightly smaller to leave room for text */
+  height: auto;
+  opacity: 0.3; /* Subtle ghost look by default */
+  z-index: 1;
+
+  /* Fun bouncy animation */
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Icon Hover State: Grow, Rotate, and Brighten */
+.create-playlist-cover:hover .plus-bg {
+  opacity: 1; /* Fully visible */
+  transform: translate(-50%, -50%) scale(1.2) rotate(90deg);
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5)); /* Glow effect */
+}
+
+/* Target only the text inside the create card */
+.create-playlist-cover .playlist-name {
+  z-index: 2;
+  margin-top: 40%; /* Pushes text down slightly below the center icon */
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8); /* readable on top of icon */
+  pointer-events: none; /* Ensures clicks pass through to the card */
+}
+
 /* --- ANIMATIONS --- */
 @keyframes push {
   0% {
